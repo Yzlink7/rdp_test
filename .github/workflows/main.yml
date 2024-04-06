@@ -1,42 +1,27 @@
 name: CI
 
-on:
-  push:
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download ngrok
-        run: wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip -O ngrok.zip
-
-      - name: Extract ngrok
-        run: unzip ngrok.zip
-
-      - name: Check ngrok directory
-        run: ls -d ngrok/ || exit 1
-
-      - name: Move ngrok executable
-        run: mv ngrok/ngrok /usr/local/bin/ngrok || exit 1
-
-      - name: Set authentication token
-        run: ngrok authtoken $NGROK_AUTH_TOKEN
-        env:
-          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-
-      - name: Enable IP forwarding
-        run: sudo sysctl -w net.ipv4.ip_forward=1
-
-      - name: Allow port 3389 in firewall
-        run: sudo ufw allow 3389
-
-      - name: Start RDP service
-        run: sudo systemctl start xrdp
-
-      - name: Set user password
-        run: echo 'runneradmin:P@ssw0rd!' | sudo chpasswd
-
-      - name: Create ngrok tunnel
-        run: ngrok tcp 3389
+    - name: Download
+      run: wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip -O ngrok.zip
+    - name: Extract
+      run: unzip ngrok.zip
+    - name: Auth
+      run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN
+      env:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    - name: Enable TS
+      run: sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+    - run: sudo ufw allow 3389
+    - run: sudo apt-get install -y xrdp
+    - run: sudo systemctl enable xrdp
+    - run: sudo systemctl start xrdp
+    - run: sudo useradd -m -p $(openssl passwd -1 P@ssw0rd!) runneradmin
+    - name: Create Tunnel
+      run: ./ngrok/ngrok tcp 3389
