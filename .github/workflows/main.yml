@@ -13,7 +13,7 @@ jobs:
     - name: Extract ngrok
       run: unzip ngrok.zip   # Extract ngrok using unzip
     - name: Check and move ngrok directory
-      run: ls -d ngrok*/ || exit 1 && mv ngrok*/ ngrok   # Check and move ngrok directory
+      run: ls -d ngrok/ || exit 1 && mv ngrok/ ngrok   # Check and move ngrok directory
     - name: Set authentication token
       run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN   # Set ngrok authentication token
       env:
