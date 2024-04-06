@@ -11,9 +11,7 @@ jobs:
     - name: Install ngrok
       run: sudo snap install ngrok
     - name: Add authtoken
-      run: sudo ngrok authtoken $Env:NGROK_AUTH_TOKEN
-      env:
-        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+      run: sudo ngrok config add-authtoken 2dGjYr5Ykrx9zBrUSbMOaxrng58_63VYYdgqVmuDTWN6ZHaZa
     - name: Enable RDP
       run: |
         sudo sysctl -w net.ipv4.tcp_tw_reuse=1
