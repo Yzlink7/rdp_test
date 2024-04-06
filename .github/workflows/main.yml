@@ -13,7 +13,7 @@ jobs:
     - name: Extract
       run: unzip ngrok.zip   # Mengubah Expand-Archive menjadi unzip untuk Linux
     - name: Ensure ngrok directory
-      run: mv ngrok*/ ngrok   # Memastikan direktori ngrok telah diekstrak dengan benar
+      run: mv $(ls -d ngrok*/) ngrok   # Memastikan direktori ngrok telah diekstrak dengan benar
     - name: Auth
       run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN   # Mengubah .\ngrok\ngrok.exe menjadi ./ngrok/ngrok untuk Linux
       env:
