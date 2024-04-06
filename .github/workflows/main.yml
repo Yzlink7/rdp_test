@@ -12,6 +12,8 @@ jobs:
       run: wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip -O ngrok.zip   # Mengubah perintah Invoke-WebRequest menjadi wget untuk Linux
     - name: Extract
       run: unzip ngrok.zip   # Mengubah Expand-Archive menjadi unzip untuk Linux
+    - name: Ensure ngrok directory
+      run: mv ngrok*/ ngrok   # Memastikan direktori ngrok telah diekstrak dengan benar
     - name: Auth
       run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN   # Mengubah .\ngrok\ngrok.exe menjadi ./ngrok/ngrok untuk Linux
       env:
