@@ -5,29 +5,26 @@ on: [push, workflow_dispatch]
 jobs:
   build:
 
-    runs-on: ubuntu-latest   # Mengubah runs-on menjadi ubuntu-latest untuk menggunakan Kali Linux
+    runs-on: ubuntu-latest   # Change runs-on to ubuntu-latest for Kali Linux
 
     steps:
-    - name: Download
-      run: wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip -O ngrok.zip   # Mengubah perintah Invoke-WebRequest menjadi wget untuk Linux
-    - name: Extract
-      run: unzip ngrok.zip   # Mengubah Expand-Archive menjadi unzip untuk Linux
-    - name: Ensure ngrok directory
-      run: |
-        ngrok_dir=$(find . -type d -name "ngrok*" | head -n 1)  # Cari direktori ngrok yang diekstrak dengan benar
-        if [ -z "$ngrok_dir" ]; then
-          echo "Unable to find ngrok directory."
-          exit 1
-        fi
-        mv "$ngrok_dir" ngrok   # Pindahkan direktori ngrok yang diekstrak
-    - name: Auth
-      run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN   # Mengubah .\ngrok\ngrok.exe menjadi ./ngrok/ngrok untuk Linux
+    - name: Download ngrok
+      run: wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip -O ngrok.zip   # Download ngrok using wget
+    - name: Extract ngrok
+      run: unzip ngrok.zip   # Extract ngrok using unzip
+    - name: Check and move ngrok directory
+      run: ls -d ngrok*/ || exit 1 && mv ngrok*/ ngrok   # Check and move ngrok directory
+    - name: Set authentication token
+      run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN   # Set ngrok authentication token
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-    - name: Enable TS
-      run: sudo sysctl -w net.ipv4.ip_forward=1   # Mengubah perintah untuk mengaktifkan IP forwarding di Linux
-    - run: sudo ufw allow 3389   # Mengubah perintah untuk mengizinkan port 3389 di firewall (gunakan perintah yang sesuai dengan firewall Kali Linux)
-    - run: sudo systemctl start xrdp   # Mengubah perintah untuk memulai layanan RDP di Linux
-    - run: sudo passwd runneradmin   # Mengubah perintah untuk mengatur kata sandi pengguna di Linux
-    - name: Create Tunnel
-      run: ./ngrok/ngrok tcp 3389   # Mengubah perintah untuk membuat tunnel TCP di Linux
+    - name: Enable IP forwarding
+      run: sudo sysctl -w net.ipv4.ip_forward=1   # Enable IP forwarding
+    - name: Allow port 3389 in firewall
+      run: sudo ufw allow 3389   # Allow port 3389 in firewall
+    - name: Start RDP service
+      run: sudo systemctl start xrdp   # Start RDP service
+    - name: Set user password
+      run: echo 'runneradmin:P@ssw0rd!' | sudo chpasswd   # Set user password
+    - name: Create ngrok tunnel
+      run: ./ngrok/ngrok tcp 3389   # Create ngrok TCP tunnel on port 3389
