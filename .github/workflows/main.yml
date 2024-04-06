@@ -19,6 +19,6 @@ jobs:
     - name: Install casaos
       run: curl -fsSL https://get.casaos.io
     - name: bash
-      run: sudo bash
+      run: bash
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 3389
