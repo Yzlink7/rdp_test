@@ -11,12 +11,9 @@ jobs:
     - name: Download
       run: wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip -O ngrok.zip
     - name: Extract
-  run: |
-    unzip ngrok.zip
-    ls -la
-
+      run: unzip ngrok.zip
     - name: Auth
-      run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN
+      run: ngrok authtoken $NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
     - name: Enable TS
