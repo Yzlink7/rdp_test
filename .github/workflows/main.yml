@@ -8,14 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download
-      run: wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip -O ngrok.zip
-    - name: Extract
-      run: unzip ngrok.zip && ls
-    - name: Auth
-      run: ngrok authtoken $NGROK_AUTH_TOKEN
-      env:
-        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    - name: Install ngrok
+      run: sudo snap install ngrok
+    - name: Add authtoken
+      run: ngrok authtoken 2dGjYr5Ykrx9zBrUSbMOaxrng58_63VYYdgqVmuDTWN6ZHaZa
     - name: Enable TS
       run: sudo sysctl -w net.ipv4.tcp_tw_reuse=1
     - run: sudo ufw allow 3389
@@ -24,4 +20,4 @@ jobs:
     - run: sudo systemctl start xrdp
     - run: sudo useradd -m -p $(openssl passwd -1 P@ssw0rd!) runneradmin
     - name: Create Tunnel
-      run: ./ngrok/ngrok tcp 3389
+      run: ngrok tcp 3389
