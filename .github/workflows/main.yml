@@ -11,13 +11,14 @@ jobs:
     - name: Install ngrok
       run: sudo snap install ngrok
     - name: Add authtoken
-      run: ngrok authtoken 2dGjYr5Ykrx9zBrUSbMOaxrng58_63VYYdgqVmuDTWN6ZHaZa
-    - name: Enable TS
-      run: sudo sysctl -w net.ipv4.tcp_tw_reuse=1
-    - run: sudo ufw allow 3389
-    - run: sudo apt-get install -y xrdp
-    - run: sudo systemctl enable xrdp
-    - run: sudo systemctl start xrdp
-    - run: sudo useradd -m -p $(openssl passwd -1 P@ssw0rd!) runneradmin
+      run: ngrok config add-authtoken 2dGjYr5Ykrx9zBrUSbMOaxrng58_63VYYdgqVmuDTWN6ZHaZa
+    - name: Enable RDP
+      run: |
+        sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+        sudo ufw allow 3389
+        sudo apt-get install -y xrdp
+        sudo systemctl enable xrdp
+        sudo systemctl start xrdp
+        sudo useradd -m -p $(openssl passwd -1 P@ssw0rd!) runneradmin
     - name: Create Tunnel
       run: ngrok tcp 3389
