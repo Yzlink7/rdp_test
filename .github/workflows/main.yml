@@ -14,8 +14,12 @@ jobs:
       run: unzip ngrok.zip   # Mengubah Expand-Archive menjadi unzip untuk Linux
     - name: Ensure ngrok directory
       run: |
-        ls -d ngrok*/ || exit 1  # Periksa apakah direktori ngrok telah diekstrak dengan benar
-        mv ngrok*/ ngrok          # Pindahkan direktori ngrok yang diekstrak
+        ngrok_dir=$(find . -type d -name "ngrok*" | head -n 1)  # Cari direktori ngrok yang diekstrak dengan benar
+        if [ -z "$ngrok_dir" ]; then
+          echo "Unable to find ngrok directory."
+          exit 1
+        fi
+        mv "$ngrok_dir" ngrok   # Pindahkan direktori ngrok yang diekstrak
     - name: Auth
       run: ./ngrok/ngrok authtoken $NGROK_AUTH_TOKEN   # Mengubah .\ngrok\ngrok.exe menjadi ./ngrok/ngrok untuk Linux
       env:
