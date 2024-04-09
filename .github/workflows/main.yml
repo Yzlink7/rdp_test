@@ -35,9 +35,9 @@ jobs:
     - name: Set Local User Password
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
     - name: mengunduh dan menginstal distribusi kali-linux
-      run: wsl --install -d kali-linux
+      run: powershell.exe -Command "wsl --install -d kali-linux"
     - name: Start kali-linux in WSL
-      run: wsl
+      run: powershell.exe -Command "wsl"
     - name: Install Docker Desktop
       run: .\DockerDesktopInstaller.exe /quiet /norestart
     - name: Create Tunnel
