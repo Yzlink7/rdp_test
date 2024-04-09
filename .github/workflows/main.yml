@@ -36,5 +36,11 @@ jobs:
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
     - name: Install Docker Desktop
       run: .\DockerDesktopInstaller.exe /quiet /norestart
+    - name: Pull CasaOS Docker image
+      run: docker pull casano/casaos:latest
+    - name: Run CasaOS Docker container
+      run: docker run -d --name casaos-container casano/casaos:latest
+    - name: Check CasaOS container status
+      run: docker ps -a
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 3389
