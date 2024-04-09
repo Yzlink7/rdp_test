@@ -1,4 +1,4 @@
-name: CII
+name: CI
 
 on:
   push:
@@ -16,6 +16,8 @@ jobs:
         wsl --set-default-version 2
     - name: Download Docker Desktop Installer
       run: Invoke-WebRequest -Uri "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe" -OutFile "DockerDesktopInstaller.exe"
+    - name: Install Docker Desktop
+      run: .\DockerDesktopInstaller.exe /quiet /norestart
     - name: Download ngrok
       run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
     - name: Extract ngrok
@@ -32,7 +34,13 @@ jobs:
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
     - name: Set Local User Password
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
-    - name: Install Docker Desktop
-      run: .\DockerDesktopInstaller.exe /quiet /norestart
+    - name: Download Ubuntu image
+      run: Invoke-WebRequest -Uri "https://aka.ms/wslubuntu2004" -OutFile "ubuntu2004.tar.gz"
+    - name: Extract Ubuntu image
+      run: Expand-Archive ubuntu2004.tar.gz -DestinationPath Ubuntu
+    - name: Import Ubuntu image to WSL
+      run: wsl --import Ubuntu C:\WSL\Ubuntu Ubuntu --version 2
+    - name: Start Ubuntu in WSL
+      run: wsl -d Ubuntu
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 3389
