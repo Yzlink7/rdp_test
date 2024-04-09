@@ -34,10 +34,6 @@ jobs:
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
     - name: Set Local User Password
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
-    - name: mengunduh dan menginstal distribusi kali-linux
-      run: powershell.exe -Command "wsl --install -d kali-linux"
-    - name: Start kali-linux in WSL
-      run: powershell.exe -Command "wsl"
     - name: Install Docker Desktop
       run: .\DockerDesktopInstaller.exe /quiet /norestart
     - name: Create Tunnel
