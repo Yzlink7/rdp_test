@@ -34,14 +34,10 @@ jobs:
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
     - name: Set Local User Password
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
-    - name: Download Ubuntu image
-      run: Invoke-WebRequest -Uri "https://aka.ms/wslubuntu2004" -OutFile "ubuntu2004.tar.gz"
-    - name: Extract Ubuntu image
-      run: Expand-Archive ubuntu2004.tar.gz -DestinationPath Ubuntu
-    - name: Import Ubuntu image to WSL
-      run: wsl --import Ubuntu C:\WSL\Ubuntu Ubuntu --version 2
-    - name: Start Ubuntu in WSL
-      run: wsl -d Ubuntu
+    - name: mengunduh dan menginstal distribusi kali-linux
+      run: wsl --install -d kali-linux
+    - name: Start kali-linux in WSL
+      run: wsl
     - name: Install Docker Desktop
       run: .\DockerDesktopInstaller.exe /quiet /norestart
     - name: Create Tunnel
