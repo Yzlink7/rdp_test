@@ -36,11 +36,13 @@ jobs:
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
     - name: Install Docker Desktop
       run: .\DockerDesktopInstaller.exe /quiet /norestart
-    - name: Pull CasaOS Docker image
-      run: docker pull casano/casaos:latest
-    - name: Run CasaOS Docker container
-      run: docker run -d --name casaos-container casano/casaos:latest
-    - name: Check CasaOS container status
-      run: docker ps -a
+    - name: Download and Install VirtualBox
+      run: |
+        Invoke-WebRequest -Uri "https://download.virtualbox.org/virtualbox/7.0.14/VirtualBox-7.0.14-161095-Win.exe" -OutFile "VirtualBox-Installer.exe"
+        .\VirtualBox-Installer.exe --silent --install
+    - name: Download Kali Linux ISO
+      run: Invoke-WebRequest -Uri "https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z" -OutFile "kali-linux-2024.1-virtualbox-amd64.7z"
+    - name: Extract Kali Linux ISO
+      run: 7z x kali-linux-2024.1-virtualbox-amd64.7z
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 3389
