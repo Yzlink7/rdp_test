@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -16,14 +18,12 @@ jobs:
         wsl --set-default-version 2
     - name: Download Docker Desktop Installer
       run: Invoke-WebRequest -Uri "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe" -OutFile "DockerDesktopInstaller.exe"
-    - name: Install Docker Desktop
-      run: .\DockerDesktopInstaller.exe /quiet /norestart
     - name: Download ngrok
       run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
     - name: Extract ngrok
       run: Expand-Archive ngrok.zip
     - name: Auth ngrok
-      run: .\ngrok\ngrok.exe authtoken "$Env:NGROK_AUTH_TOKEN"
+      run: .\ngrok\ngrok.exe authtoken "${{ secrets.NGROK_AUTH_TOKEN }}"
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
     - name: Enable TS
@@ -42,5 +42,7 @@ jobs:
       run: wsl --import Ubuntu C:\WSL\Ubuntu Ubuntu --version 2
     - name: Start Ubuntu in WSL
       run: wsl -d Ubuntu
+    - name: Install Docker Desktop
+      run: .\DockerDesktopInstaller.exe /quiet /norestart
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 3389
