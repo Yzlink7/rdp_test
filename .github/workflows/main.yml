@@ -1,4 +1,4 @@
-name: CII
+name: CI
 
 on: 
   push:
@@ -32,14 +32,14 @@ jobs:
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
 
-    - name: Enable TS
+    - name: Enable VNC
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
 
-    - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    - run: Enable-NetFirewallRule -DisplayGroup "VNC"
 
     - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
 
     - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
 
-    - name: Create Tunnel
-      run: .\ngrok\ngrok.exe tcp 3389
+    - name: Create Tunnel for VNC
+      run: .\ngrok\ngrok.exe tcp 5900
